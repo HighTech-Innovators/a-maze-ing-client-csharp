@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using HightechICT.Amazeing.Client.Rest;
 
 namespace AmazeingCore
 {
@@ -11,7 +12,7 @@ namespace AmazeingCore
             var httpClient = new System.Net.Http.HttpClient();
             httpClient.DefaultRequestHeaders.Add("Authorization", "<your key>");
             
-            var client = new AmazeingClient("https://maze.hightechict.nl/", httpClient);
+            IAmazeingClient client = new AmazeingClient("https://maze.hightechict.nl/", httpClient);
 
             // Forget player, in order to hard-reset if "I" (the player, by key) was still in a Maze
             await client.ForgetPlayer();

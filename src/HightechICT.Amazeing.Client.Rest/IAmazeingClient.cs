@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AmazeingCore
+namespace HightechICT.Amazeing.Client.Rest
 {
     public interface IAmazeingClient
     {
