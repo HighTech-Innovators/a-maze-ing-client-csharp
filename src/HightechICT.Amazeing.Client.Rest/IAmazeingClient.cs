@@ -2,13 +2,13 @@
 
 public interface IAmazeingClient
 {
-    Task<ICollection<MazeInfo>> AllMazes();
-    Task<PossibleActionsAndCurrentScore> CollectScore();
-    Task<PossibleActionsAndCurrentScore> EnterMaze(string mazeName);
-    Task ExitMaze();
     Task ForgetPlayer();
-    Task<PlayerInfo> GetPlayerInfo();
-    Task<PossibleActionsAndCurrentScore> Move(Direction direction);
-    Task<PossibleActionsAndCurrentScore> PossibleActions();
     Task RegisterPlayer(string name);
+    Task<ICollection<MazeInfo>> AllMazes();
+    Task<PossibleActionsAndCurrentScore> EnterMaze(string mazeName);
+    Task<PossibleActionsAndCurrentScore> Move(Direction direction);
+    Task<PossibleActionsAndCurrentScore> CollectScore();
+    Task ExitMaze();
+    Task<PossibleActionsAndCurrentScore> PossibleActions();
+    Task<PlayerInfo> GetPlayerInfo();
 }
