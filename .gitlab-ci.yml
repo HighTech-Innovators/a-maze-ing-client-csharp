@@ -24,7 +24,7 @@ release-semantic-release:
   needs:
     - build
     
-pack:
+publish:
   image: mcr.microsoft.com/dotnet/sdk:6.0-alpine
   stage: release
   needs:
