@@ -1,4 +1,4 @@
 {
   "extends": "/semantic-release-base.json",
-  "branches": ["main"]
+  "branches": ["master"]
 }
