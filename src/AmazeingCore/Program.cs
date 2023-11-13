@@ -37,7 +37,6 @@ namespace AmazeingCore
             var newMoveOptions = await client.Move(enterResult.PossibleMoveActions.First().Direction);
             Console.WriteLine(string.Join(", ", newMoveOptions.PossibleMoveActions.Select(ma => ma.Direction)));
 
-
             Console.ReadLine();
         }
     }
