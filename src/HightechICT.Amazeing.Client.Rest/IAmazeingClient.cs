@@ -9,7 +9,7 @@ public interface IAmazeingClient
     Task<PossibleActionsAndCurrentScore> Move(Direction direction);
     Task<PossibleActionsAndCurrentScore> CollectScore();
     Task ExitMaze();
+    Task<PossibleActionsAndCurrentScore> Tag(long tag);
     Task<PossibleActionsAndCurrentScore> PossibleActions();
     Task<PlayerInfo> GetPlayerInfo();
-    Task<PossibleActionsAndCurrentScore> Tag(long tag);
 }
