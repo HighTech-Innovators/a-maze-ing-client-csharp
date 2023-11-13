@@ -14,7 +14,7 @@ build:
   script:
     - dotnet build src/HightechICT.Amazeing.Client.Rest/HightechICT.Amazeing.Client.Rest.csproj
 
-verify-merge-title:
+verify-semantic-merge-title:
   extends: .verify-pr-title
   stage: dev-quality
 
