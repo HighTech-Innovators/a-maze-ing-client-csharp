@@ -5,9 +5,8 @@ include:
 
 stages:
   - build
-  - packing
   - dev-quality
-  - publish
+  - release
 
 build:
   image: mcr.microsoft.com/dotnet/sdk:6.0-alpine
@@ -15,23 +14,30 @@ build:
   script:
     - dotnet build src/HightechICT.Amazeing.Client.Rest/HightechICT.Amazeing.Client.Rest.csproj
 
-pack:
+verify-merge-title:
+  extends: .verify-pr-title
+  stage: dev-quality
+
+release-semantic-release:
   extends: .semantic-release
+  stage: release
+  needs:
+    - build
+    
+pack:
   image: mcr.microsoft.com/dotnet/sdk:6.0-alpine
-  stage: packing
+  stage: release
+  only:
+    - master
   script:
     - export RELEASE_VERSION=$(cat release-version.txt)
     - echo $RELEASE_VERSION
     - dotnet pack -c Release src/HightechICT.Amazeing.Client.Rest/HightechICT.Amazeing.Client.Rest.csproj /p:Version=$RELEASE_VERSION
 
-verify-merge-title:
-  extends: .verify-pr-title
-  stage: dev-quality
 
 publish:
   image: mcr.microsoft.com/dotnet/sdk:6.0-alpine
-  extends: .semantic-release
-  stage: publish
+  stage: release
   only:
     - master
   script:
