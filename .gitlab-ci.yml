@@ -27,6 +27,8 @@ release-semantic-release:
 pack:
   image: mcr.microsoft.com/dotnet/sdk:6.0-alpine
   stage: release
+  needs:
+    - release-semantic-release
   only:
     - master
   script:
@@ -38,6 +40,8 @@ pack:
 publish:
   image: mcr.microsoft.com/dotnet/sdk:6.0-alpine
   stage: release
+  needs:
+    - release-semantic-release
   only:
     - master
   script:
