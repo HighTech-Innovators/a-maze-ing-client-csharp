@@ -30,9 +30,12 @@ namespace AmazeingCore
             var enterResult = await client.EnterMaze(chosenMaze.Name);
             Console.WriteLine(string.Join(", ", enterResult.PossibleMoveActions.Select( ma => ma.Direction)));
 
+            Console.WriteLine("Tagging the entering tile");
+            var moveOptions = await client.Tag(1);
+
             Console.WriteLine($"Making a move");
             var newPossibles = await client.Move(enterResult.PossibleMoveActions.First().Direction);
-            Console.WriteLine(string.Join(", ", newPossibles.PossibleMoveActions.Select( ma => ma.Direction)));
+            Console.WriteLine(string.Join(", ", newPossibles.PossibleMoveActions.Select(ma => ma.Direction)));
 
             Console.ReadLine();
         }

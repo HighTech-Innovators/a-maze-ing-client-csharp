@@ -11,4 +11,5 @@ public interface IAmazeingClient
     Task ExitMaze();
     Task<PossibleActionsAndCurrentScore> PossibleActions();
     Task<PlayerInfo> GetPlayerInfo();
+    Task<PossibleActionsAndCurrentScore> Tag(long tag);
 }

@@ -1,0 +1,38 @@
+include:
+  - project: 'hightech-ict/infra/semantic-release'
+    ref: '1.2.1'
+    file: 'semantic-release-steps.yml'
+
+stages:
+  - build
+  - packing
+  - dev-quality
+  - publish
+
+build:
+  image: mcr.microsoft.com/dotnet/sdk:6.0-alpine
+  stage: build
+  script:
+    - dotnet build src/HightechICT.Amazeing.Client.Rest/HightechICT.Amazeing.Client.Rest.csproj
+
+pack:
+  extends: .semantic-release
+  image: mcr.microsoft.com/dotnet/sdk:6.0-alpine
+  stage: packing
+  script:
+    - export RELEASE_VERSION=$(cat release-version.txt)
+    - echo $RELEASE_VERSION
+    - dotnet pack -c Release src/HightechICT.Amazeing.Client.Rest/HightechICT.Amazeing.Client.Rest.csproj /p:Version=$RELEASE_VERSION
+
+verify-merge-title:
+  extends: .verify-pr-title
+  stage: dev-quality
+
+publish:
+  image: mcr.microsoft.com/dotnet/sdk:6.0-alpine
+  extends: .semantic-release
+  stage: publish
+  only:
+    - main
+  script:
+    - dotnet nuget push src/HightechICT.Amazeing.Client.Rest/bin/Release/HightechICT.Amazeing.Client.Rest.*.nupkg -k $NUGET_API_KEY -s https://api.nuget.org/v3/index.json
