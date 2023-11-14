@@ -9,7 +9,7 @@ stages:
   - release
 
 build:
-  image: mcr.microsoft.com/dotnet/sdk:6.0-alpine
+  image: mcr.microsoft.com/dotnet/sdk:8.0-alpine
   stage: build
   script:
     - dotnet build src/HightechICT.Amazeing.Client.Rest/HightechICT.Amazeing.Client.Rest.csproj
