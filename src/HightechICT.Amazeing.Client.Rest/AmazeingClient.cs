@@ -12,25 +12,25 @@
 
 namespace HightechICT.Amazeing.Client.Rest
 {
-	using System = global::System;
+    using System.Threading;
+    using System = global::System;
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.2.2.0 (NJsonSchema v10.1.4.0 (Newtonsoft.Json v9.0.0.0))")]
     public partial class AmazeingClient : IAmazeingClient
     {
         private string _baseUrl = "";
         private System.Net.Http.HttpClient _httpClient;
-        private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
-
+        private static System.Lazy<System.Text.Json.JsonSerializerOptions> _settings = new System.Lazy<System.Text.Json.JsonSerializerOptions>(CreateSerializerSettings, true);
         public AmazeingClient(string baseUrl, System.Net.Http.HttpClient httpClient)
         {
             BaseUrl = baseUrl;
             _httpClient = httpClient;
-            _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
-        }
+            _settings = new System.Lazy<System.Text.Json.JsonSerializerOptions>(CreateSerializerSettings, true);
+    }
 
-        private Newtonsoft.Json.JsonSerializerSettings CreateSerializerSettings()
+        private static System.Text.Json.JsonSerializerOptions CreateSerializerSettings()
         {
-            var settings = new Newtonsoft.Json.JsonSerializerSettings();
+            var settings = new System.Text.Json.JsonSerializerOptions();
             UpdateJsonSerializerSettings(settings);
             return settings;
         }
@@ -41,9 +41,9 @@ namespace HightechICT.Amazeing.Client.Rest
             set { _baseUrl = value; }
         }
 
-        protected Newtonsoft.Json.JsonSerializerSettings JsonSerializerSettings { get { return _settings.Value; } }
+        protected System.Text.Json.JsonSerializerOptions JsonSerializerSettings { get { return _settings.Value; } }
 
-        partial void UpdateJsonSerializerSettings(Newtonsoft.Json.JsonSerializerSettings settings);
+        static partial void UpdateJsonSerializerSettings(System.Text.Json.JsonSerializerOptions settings);
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, string url);
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder);
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
@@ -884,10 +884,10 @@ namespace HightechICT.Amazeing.Client.Rest
                 var responseText = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    var typedBody = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(responseText, JsonSerializerSettings);
+                    var typedBody = System.Text.Json.JsonSerializer.Deserialize<T>(responseText, JsonSerializerSettings);
                     return new ObjectResponseResult<T>(typedBody, responseText);
                 }
-                catch (Newtonsoft.Json.JsonException exception)
+                catch (System.Text.Json.JsonException exception)
                 {
                     var message = "Could not deserialize the response body string as " + typeof(T).FullName + ".";
                     throw new ApiException(message, (int)response.StatusCode, responseText, headers, exception);
@@ -898,15 +898,12 @@ namespace HightechICT.Amazeing.Client.Rest
                 try
                 {
                     using (var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
-                    using (var streamReader = new System.IO.StreamReader(responseStream))
-                    using (var jsonTextReader = new Newtonsoft.Json.JsonTextReader(streamReader))
                     {
-                        var serializer = Newtonsoft.Json.JsonSerializer.Create(JsonSerializerSettings);
-                        var typedBody = serializer.Deserialize<T>(jsonTextReader);
+                        var typedBody = await System.Text.Json.JsonSerializer.DeserializeAsync<T>(responseStream, JsonSerializerSettings).ConfigureAwait(false);
                         return new ObjectResponseResult<T>(typedBody, string.Empty);
                     }
                 }
-                catch (Newtonsoft.Json.JsonException exception)
+                catch (System.Text.Json.JsonException exception)
                 {
                     var message = "Could not deserialize the response body stream as " + typeof(T).FullName + ".";
                     throw new ApiException(message, (int)response.StatusCode, string.Empty, headers, exception);
@@ -951,136 +948,260 @@ namespace HightechICT.Amazeing.Client.Rest
         }
     }
 
-    /// <summary>From the current tile where you stand, what actions are available on it and on the surrounding tiles.</summary>
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.4.0 (Newtonsoft.Json v9.0.0.0)")]
-	public partial class PossibleActionsAndCurrentScore
-	{
-		/// <summary>The actions available on your surrounding tiles (lookahead of one tile).</summary>
-		[Newtonsoft.Json.JsonProperty("possibleMoveActions", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-		public System.Collections.Generic.ICollection<MoveAction> PossibleMoveActions { get; set; }
+    /// <summary>
+    /// From the current tile where you stand, what actions are available on it and on the surrounding tiles.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class PossibleActionsAndCurrentScore
+    {
+        /// <summary>
+        /// The actions available on your surrounding tiles (lookahead of one tile).
+        /// </summary>
 
-		/// <summary>In the tile where you are standing, is it possible to collect score (from hand to bag).</summary>
-		[Newtonsoft.Json.JsonProperty("canCollectScoreHere", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-		public bool CanCollectScoreHere { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("possibleMoveActions")]
 
-		/// <summary>In the tile where you are standing, is it possible to exit the maze. Remember you will lose any score in hand
-		/// and only be rewarded with the score you have in your bag.</summary>
-		[Newtonsoft.Json.JsonProperty("canExitMazeHere", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-		public bool CanExitMazeHere { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+        public System.Collections.Generic.ICollection<MoveAction> PossibleMoveActions { get; set; }
 
-		/// <summary>What is the score you currently have in your hand. Find a score collection point and issue a collect
-		/// score command to move this score into your bag. Score in your hand is not awarded when you exit a maze.</summary>
-		[Newtonsoft.Json.JsonProperty("currentScoreInHand", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-		public int CurrentScoreInHand { get; set; }
+        /// <summary>
+        /// In the tile where you are standing, is it possible to collect score (from hand to bag).
+        /// </summary>
 
-		/// <summary>What is the score currently in your bag. When you exit the maze this score will be rewarded to your total
-		/// overall score.</summary>
-		[Newtonsoft.Json.JsonProperty("currentScoreInBag", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-		public int CurrentScoreInBag { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("canCollectScoreHere")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+        public bool? CanCollectScoreHere { get; set; }
+
+        /// <summary>
+        /// In the tile where you are standing, is it possible to exit the maze. Remember you will lose any score in hand
+        /// <br/>and only be rewarded with the score you have in your bag.
+        /// </summary>
+
+        [System.Text.Json.Serialization.JsonPropertyName("canExitMazeHere")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+        public bool? CanExitMazeHere { get; set; }
+
+        /// <summary>
+        /// What is the score you currently have in your hand. Find a score collection point and issue a collect
+        /// <br/>score command to move this score into your bag. Score in your hand is not awarded when you exit a maze.
+        /// </summary>
+
+        [System.Text.Json.Serialization.JsonPropertyName("currentScoreInHand")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+        public int? CurrentScoreInHand { get; set; }
+
+        /// <summary>
+        /// What is the score currently in your bag. When you exit the maze this score will be rewarded to your total
+        /// <br/>overall score.
+        /// </summary>
+
+        [System.Text.Json.Serialization.JsonPropertyName("currentScoreInBag")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+        public int? CurrentScoreInBag { get; set; }
 
         /// <summary>
         /// The tag on the current tile
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("tagOnCurrentTile", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("tagOnCurrentTile")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
         public long? TagOnCurrentTile { get; set; }
+
     }
 
-	/// <summary>A tile</summary>
-	[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.4.0 (Newtonsoft.Json v9.0.0.0)")]
-	public partial class MoveAction
-	{
-		/// <summary>What is the relative direction of this tile.</summary>
-		[Newtonsoft.Json.JsonProperty("direction", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-		[Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-		public Direction Direction { get; set; }
+    /// <summary>
+    /// A tile
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class MoveAction
+    {
+        /// <summary>
+        /// What is the relative direction of this tile.
+        /// </summary>
 
-		/// <summary>Is this the tile where the maze begun.</summary>
-		[Newtonsoft.Json.JsonProperty("isStart", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-		public bool IsStart { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("direction")]
 
-		/// <summary>Can you exit the maze on this tile.</summary>
-		[Newtonsoft.Json.JsonProperty("allowsExit", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-		public bool AllowsExit { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
+        public Direction Direction { get; set; }
 
-		/// <summary>Does this tile allow for score collection (moving score from your hand to your bag).</summary>
-		[Newtonsoft.Json.JsonProperty("allowsScoreCollection", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-		public bool AllowsScoreCollection { get; set; }
+        /// <summary>
+        /// Is this the tile where the maze begun.
+        /// </summary>
 
-		/// <summary>Have you visited this tile before.</summary>
-		[Newtonsoft.Json.JsonProperty("hasBeenVisited", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-		public bool HasBeenVisited { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("isStart")]
 
-		/// <summary>What reward is available on this tile.</summary>
-		[Newtonsoft.Json.JsonProperty("rewardOnDestination", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-		public int RewardOnDestination { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+        public bool? IsStart { get; set; }
+
+        /// <summary>
+        /// Can you exit the maze on this tile.
+        /// </summary>
+
+        [System.Text.Json.Serialization.JsonPropertyName("allowsExit")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+        public bool? AllowsExit { get; set; }
+
+        /// <summary>
+        /// Does this tile allow for score collection (moving score from your hand to your bag).
+        /// </summary>
+
+        [System.Text.Json.Serialization.JsonPropertyName("allowsScoreCollection")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+        public bool? AllowsScoreCollection { get; set; }
+
+        /// <summary>
+        /// Have you visited this tile before.
+        /// </summary>
+
+        [System.Text.Json.Serialization.JsonPropertyName("hasBeenVisited")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+        public bool? HasBeenVisited { get; set; }
+
+        /// <summary>
+        /// What reward is available on this tile.
+        /// </summary>
+
+        [System.Text.Json.Serialization.JsonPropertyName("rewardOnDestination")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+        public int? RewardOnDestination { get; set; }
 
         /// <summary>
         /// The tag on this tile. NOTE: default tag is 0
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("tagOnTile", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("tagOnTile")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
         public long? TagOnTile { get; set; }
+
     }
 
-	/// <summary>Information related to a Maze.</summary>
-	[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.4.0 (Newtonsoft.Json v9.0.0.0)")]
-	public partial class MazeInfo
-	{
-		/// <summary>The name of the maze. Might give you a hint regarding its structure.</summary>
-		[Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-		public string Name { get; set; }
+    /// <summary>
+    /// Information related to a Maze.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class MazeInfo
+    {
+        /// <summary>
+        /// The name of the maze. Might give you a hint regarding its structure.
+        /// </summary>
 
-		/// <summary>How many tiles exist in this maze.</summary>
-		[Newtonsoft.Json.JsonProperty("totalTiles", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-		public int TotalTiles { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("name")]
 
-		/// <summary>The total available reward in this maze.</summary>
-		[Newtonsoft.Json.JsonProperty("potentialReward", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-		public int PotentialReward { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+        public string Name { get; set; }
 
+        /// <summary>
+        /// How many tiles exist in this maze.
+        /// </summary>
 
-	}
+        [System.Text.Json.Serialization.JsonPropertyName("totalTiles")]
 
-	/// <summary>The data structure that represents information related to a player.</summary>
-	[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.4.0 (Newtonsoft.Json v9.0.0.0)")]
-	public partial class PlayerInfo
-	{
-		/// <summary>The public unique identifier of a player.</summary>
-		[Newtonsoft.Json.JsonProperty("playerId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-		public string PlayerId { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+        public int? TotalTiles { get; set; }
 
-		/// <summary>The name a player has chosen to represent her.</summary>
-		[Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-		public string Name { get; set; }
+        /// <summary>
+        /// The total available reward in this maze.
+        /// </summary>
 
-		/// <summary>An indication of whether a player is currently playing a maze or not.</summary>
-		[Newtonsoft.Json.JsonProperty("isInMaze", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-		public bool IsInMaze { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("potentialReward")]
 
-		/// <summary>The name of the maze the player is currently playing. Might be null if player
-		/// is not currently playing a maze.</summary>
-		[Newtonsoft.Json.JsonProperty("maze", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-		public string Maze { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+        public int? PotentialReward { get; set; }
 
-		/// <summary>Wink wink.</summary>
-		[Newtonsoft.Json.JsonProperty("hasFoundEasterEgg", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-		public bool HasFoundEasterEgg { get; set; }
+    }
 
-		/// <summary>How much score the player has in her hand. Only available if player is playing a maze.</summary>
-		[Newtonsoft.Json.JsonProperty("mazeScoreInHand", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-		public int MazeScoreInHand { get; set; }
+    /// <summary>
+    /// The data structure that represents information related to a player.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class PlayerInfo
+    {
+        /// <summary>
+        /// The public unique identifier of a player.
+        /// </summary>
 
-		/// <summary>How much score the player has in her bag. Only available if player is playing a maze.</summary>
-		[Newtonsoft.Json.JsonProperty("mazeScoreInBag", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-		public int MazeScoreInBag { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("playerId")]
 
-		/// <summary>The accumulated score across all played mazes.</summary>
-		[Newtonsoft.Json.JsonProperty("playerScore", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-		public int PlayerScore { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+        public string PlayerId { get; set; }
 
+        /// <summary>
+        /// The name a player has chosen to represent her.
+        /// </summary>
 
-	}
+        [System.Text.Json.Serialization.JsonPropertyName("name")]
 
-	[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.4.0 (Newtonsoft.Json v9.0.0.0)")]
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// An indication of whether a player is currently playing a maze or not.
+        /// </summary>
+
+        [System.Text.Json.Serialization.JsonPropertyName("isInMaze")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+        public bool? IsInMaze { get; set; }
+
+        /// <summary>
+        /// The name of the maze the player is currently playing. Might be null if player
+        /// <br/>is not currently playing a maze.
+        /// </summary>
+
+        [System.Text.Json.Serialization.JsonPropertyName("maze")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+        public string Maze { get; set; }
+
+        /// <summary>
+        /// Wink wink.
+        /// </summary>
+
+        [System.Text.Json.Serialization.JsonPropertyName("hasFoundEasterEgg")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+        public bool? HasFoundEasterEgg { get; set; }
+
+        /// <summary>
+        /// How much score the player has in her hand. Only available if player is playing a maze.
+        /// </summary>
+
+        [System.Text.Json.Serialization.JsonPropertyName("mazeScoreInHand")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+        public int? MazeScoreInHand { get; set; }
+
+        /// <summary>
+        /// How much score the player has in her bag. Only available if player is playing a maze.
+        /// </summary>
+
+        [System.Text.Json.Serialization.JsonPropertyName("mazeScoreInBag")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+        public int? MazeScoreInBag { get; set; }
+
+        /// <summary>
+        /// The accumulated score across all played mazes.
+        /// </summary>
+
+        [System.Text.Json.Serialization.JsonPropertyName("playerScore")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+        public int? PlayerScore { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.4.0 (Newtonsoft.Json v9.0.0.0)")]
 	public enum Direction
 	{
 		[System.Runtime.Serialization.EnumMember(Value = @"Up")]
