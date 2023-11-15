@@ -1009,7 +1009,7 @@ namespace HightechICT.Amazeing.Client.Rest
         [System.Text.Json.Serialization.JsonPropertyName("tagOnCurrentTile")]
 
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
-        public long TagOnCurrentTile { get; set; }
+        public long? TagOnCurrentTile { get; set; }
 
     }
 
@@ -1081,7 +1081,7 @@ namespace HightechICT.Amazeing.Client.Rest
         [System.Text.Json.Serialization.JsonPropertyName("tagOnTile")]
 
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
-        public long TagOnTile { get; set; }
+        public long? TagOnTile { get; set; }
 
     }
 
