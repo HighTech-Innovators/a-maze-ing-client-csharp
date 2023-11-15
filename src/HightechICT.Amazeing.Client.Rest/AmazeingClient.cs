@@ -970,7 +970,7 @@ namespace HightechICT.Amazeing.Client.Rest
         [System.Text.Json.Serialization.JsonPropertyName("canCollectScoreHere")]
 
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
-        public bool? CanCollectScoreHere { get; set; }
+        public bool CanCollectScoreHere { get; set; }
 
         /// <summary>
         /// In the tile where you are standing, is it possible to exit the maze. Remember you will lose any score in hand
@@ -980,7 +980,7 @@ namespace HightechICT.Amazeing.Client.Rest
         [System.Text.Json.Serialization.JsonPropertyName("canExitMazeHere")]
 
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
-        public bool? CanExitMazeHere { get; set; }
+        public bool CanExitMazeHere { get; set; }
 
         /// <summary>
         /// What is the score you currently have in your hand. Find a score collection point and issue a collect
@@ -990,7 +990,7 @@ namespace HightechICT.Amazeing.Client.Rest
         [System.Text.Json.Serialization.JsonPropertyName("currentScoreInHand")]
 
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
-        public int? CurrentScoreInHand { get; set; }
+        public int CurrentScoreInHand { get; set; }
 
         /// <summary>
         /// What is the score currently in your bag. When you exit the maze this score will be rewarded to your total
@@ -1000,7 +1000,7 @@ namespace HightechICT.Amazeing.Client.Rest
         [System.Text.Json.Serialization.JsonPropertyName("currentScoreInBag")]
 
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
-        public int? CurrentScoreInBag { get; set; }
+        public int CurrentScoreInBag { get; set; }
 
         /// <summary>
         /// The tag on the current tile
@@ -1009,7 +1009,7 @@ namespace HightechICT.Amazeing.Client.Rest
         [System.Text.Json.Serialization.JsonPropertyName("tagOnCurrentTile")]
 
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
-        public long? TagOnCurrentTile { get; set; }
+        public long TagOnCurrentTile { get; set; }
 
     }
 
@@ -1036,7 +1036,7 @@ namespace HightechICT.Amazeing.Client.Rest
         [System.Text.Json.Serialization.JsonPropertyName("isStart")]
 
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
-        public bool? IsStart { get; set; }
+        public bool IsStart { get; set; }
 
         /// <summary>
         /// Can you exit the maze on this tile.
@@ -1045,7 +1045,7 @@ namespace HightechICT.Amazeing.Client.Rest
         [System.Text.Json.Serialization.JsonPropertyName("allowsExit")]
 
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
-        public bool? AllowsExit { get; set; }
+        public bool AllowsExit { get; set; }
 
         /// <summary>
         /// Does this tile allow for score collection (moving score from your hand to your bag).
@@ -1054,7 +1054,7 @@ namespace HightechICT.Amazeing.Client.Rest
         [System.Text.Json.Serialization.JsonPropertyName("allowsScoreCollection")]
 
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
-        public bool? AllowsScoreCollection { get; set; }
+        public bool AllowsScoreCollection { get; set; }
 
         /// <summary>
         /// Have you visited this tile before.
@@ -1063,7 +1063,7 @@ namespace HightechICT.Amazeing.Client.Rest
         [System.Text.Json.Serialization.JsonPropertyName("hasBeenVisited")]
 
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
-        public bool? HasBeenVisited { get; set; }
+        public bool HasBeenVisited { get; set; }
 
         /// <summary>
         /// What reward is available on this tile.
@@ -1072,7 +1072,7 @@ namespace HightechICT.Amazeing.Client.Rest
         [System.Text.Json.Serialization.JsonPropertyName("rewardOnDestination")]
 
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
-        public int? RewardOnDestination { get; set; }
+        public int RewardOnDestination { get; set; }
 
         /// <summary>
         /// The tag on this tile. NOTE: default tag is 0
@@ -1081,7 +1081,7 @@ namespace HightechICT.Amazeing.Client.Rest
         [System.Text.Json.Serialization.JsonPropertyName("tagOnTile")]
 
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
-        public long? TagOnTile { get; set; }
+        public long TagOnTile { get; set; }
 
     }
 
@@ -1107,7 +1107,7 @@ namespace HightechICT.Amazeing.Client.Rest
         [System.Text.Json.Serialization.JsonPropertyName("totalTiles")]
 
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
-        public int? TotalTiles { get; set; }
+        public int TotalTiles { get; set; }
 
         /// <summary>
         /// The total available reward in this maze.
@@ -1116,7 +1116,7 @@ namespace HightechICT.Amazeing.Client.Rest
         [System.Text.Json.Serialization.JsonPropertyName("potentialReward")]
 
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
-        public int? PotentialReward { get; set; }
+        public int PotentialReward { get; set; }
 
     }
 
@@ -1151,7 +1151,7 @@ namespace HightechICT.Amazeing.Client.Rest
         [System.Text.Json.Serialization.JsonPropertyName("isInMaze")]
 
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
-        public bool? IsInMaze { get; set; }
+        public bool IsInMaze { get; set; }
 
         /// <summary>
         /// The name of the maze the player is currently playing. Might be null if player
@@ -1170,7 +1170,7 @@ namespace HightechICT.Amazeing.Client.Rest
         [System.Text.Json.Serialization.JsonPropertyName("hasFoundEasterEgg")]
 
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
-        public bool? HasFoundEasterEgg { get; set; }
+        public bool HasFoundEasterEgg { get; set; }
 
         /// <summary>
         /// How much score the player has in her hand. Only available if player is playing a maze.
@@ -1179,7 +1179,7 @@ namespace HightechICT.Amazeing.Client.Rest
         [System.Text.Json.Serialization.JsonPropertyName("mazeScoreInHand")]
 
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
-        public int? MazeScoreInHand { get; set; }
+        public int MazeScoreInHand { get; set; }
 
         /// <summary>
         /// How much score the player has in her bag. Only available if player is playing a maze.
@@ -1188,7 +1188,7 @@ namespace HightechICT.Amazeing.Client.Rest
         [System.Text.Json.Serialization.JsonPropertyName("mazeScoreInBag")]
 
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
-        public int? MazeScoreInBag { get; set; }
+        public int MazeScoreInBag { get; set; }
 
         /// <summary>
         /// The accumulated score across all played mazes.
@@ -1197,7 +1197,7 @@ namespace HightechICT.Amazeing.Client.Rest
         [System.Text.Json.Serialization.JsonPropertyName("playerScore")]
 
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
-        public int? PlayerScore { get; set; }
+        public int PlayerScore { get; set; }
 
     }
 
