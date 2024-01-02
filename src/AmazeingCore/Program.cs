@@ -10,9 +10,12 @@ namespace AmazeingCore
         static async Task Main(string[] args)
         {
             var httpClient = new System.Net.Http.HttpClient();
-            httpClient.DefaultRequestHeaders.Add("Authorization", "<your key>");
-            
-            IAmazeingClient client = new AmazeingClient("https://maze.hightechict.nl/", httpClient);
+            httpClient.DefaultRequestHeaders.Add("Authorization", "HTI Thanks You [3KE]");
+
+            IAmazeingClient client = new AmazeingClient(httpClient)
+            {
+                BaseUrl = "https://maze.hightechict.nl/",
+            };
 
             // Forget player, in order to hard-reset if "I" (the player, by key) was still in a Maze
             await client.ForgetPlayer();
