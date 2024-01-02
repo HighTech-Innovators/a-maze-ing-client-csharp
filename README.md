@@ -104,6 +104,7 @@ Class | Method | HTTP request | Description
 *MazeApi* | [**ExitMaze**](docs/MazeApi.md#exitmaze) | **POST** /api/maze/exit | 🚪 Exit the maze.
 *MazeApi* | [**Move**](docs/MazeApi.md#move) | **POST** /api/maze/move | Move in the supplied direction.
 *MazeApi* | [**PossibleActions**](docs/MazeApi.md#possibleactions) | **GET** /api/maze/possibleActions | 👀 Get the list of possible actions, from the tile where you are standing.
+*MazeApi* | [**Tag**](docs/MazeApi.md#tag) | **POST** /api/maze/tag | 👀 Get the list of possible actions, from the tile where you are standing.
 *MazesApi* | [**All**](docs/MazesApi.md#all) | **GET** /api/mazes/all | 📜 All the mazes that exist in the game.
 *MazesApi* | [**Enter**](docs/MazesApi.md#enter) | **POST** /api/mazes/enter | 🌟 Enter a maze.
 *PlayerApi* | [**Forget**](docs/PlayerApi.md#forget) | **DELETE** /api/player/forget | 🙈 Forget your current progress.
