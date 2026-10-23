@@ -35,4 +35,6 @@ publish:
     - export RELEASE_VERSION=$(cat release-version.txt)
     - echo $RELEASE_VERSION
     - dotnet pack -c Release src/HightechICT.Amazeing.Client.Rest/HightechICT.Amazeing.Client.Rest.csproj /p:Version=$RELEASE_VERSION
-    - dotnet nuget push src/HightechICT.Amazeing.Client.Rest/bin/Release/HightechICT.Amazeing.Client.Rest.*.nupkg -k $NUGET_API_KEY -s https://api.nuget.org/v3/index.json
+    # Disabled: nuget.org Trusted Publishing doesn't support self-hosted GitLab yet, so publishing moved to the
+    # GitHub mirror (.github/workflows/publish.yml, runs on the release tag). Re-enable when nuget.org supports it.
+    # - dotnet nuget push src/HightechICT.Amazeing.Client.Rest/bin/Release/HightechICT.Amazeing.Client.Rest.*.nupkg -k $NUGET_API_KEY -s https://api.nuget.org/v3/index.json

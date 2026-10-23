@@ -1,0 +1,37 @@
+# Publishes HightechICT.Amazeing.Client.Rest to nuget.org with Trusted Publishing (OIDC, no long-lived API key).
+# This GitHub repo is a push mirror of
+# https://gitlab.developer.htiprojects.nl/hackathons/a-maze-ing-evening/a-maze-ing-client-csharp, which is the
+# source of truth: change this file there. Release tags (e.g. 3.1.0) are created by semantic-release on GitLab.
+name: publish
+
+on:
+  push:
+    tags: ['**']
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+
+      - name: Pack
+        env:
+          TAG: ${{ github.ref_name }}
+        run: dotnet pack -c Release src/HightechICT.Amazeing.Client.Rest/HightechICT.Amazeing.Client.Rest.csproj -o out /p:Version="${TAG#v}"
+
+      - name: NuGet login (Trusted Publishing)
+        id: login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ vars.NUGET_USER || 'htibartdeboer' }}
+
+      - name: Push to nuget.org
+        run: dotnet nuget push out/*.nupkg --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
